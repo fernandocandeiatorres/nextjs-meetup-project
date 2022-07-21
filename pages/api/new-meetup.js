@@ -7,9 +7,12 @@ async function handler(req, res) {
   if (req.method === "POST") {
     const data = req.body;
 
+    const user = process.env.DB_USER;
+    const password = process.env.DB_PASSWORD;
     const client = await MongoClient.connect(
-      "mongodb+srv://fernandodev:03042003bB@cluster0.uixyadr.mongodb.net/meetups?retryWrites=true&w=majority"
+      `mongodb+srv://${user}:${password}@cluster0.uixyadr.mongodb.net/meetups?retryWrites=true&w=majority`
     );
+
     const db = client.db();
 
     // non relational database
@@ -19,8 +22,6 @@ async function handler(req, res) {
     const meetupsCollection = db.collection("meetups");
 
     const result = await meetupsCollection.insertOne(data);
-
-    console.log(result);
 
     client.close();
 

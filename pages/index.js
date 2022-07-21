@@ -1,17 +1,32 @@
+import Head from "next/head";
 import { MongoClient } from "mongodb";
 
 import MeetupList from "../components/meetups/MeetupList";
+import { Fragment } from "react";
 
 function HomePage(props) {
-  return <MeetupList meetups={props.meetups} />;
+  return (
+    <Fragment>
+      <Head>
+        <title>All Meetups</title>
+        <meta
+          name="description"
+          content="Browse a huge list of highly active React meetups!"
+        />
+      </Head>
+      <MeetupList meetups={props.meetups} />
+    </Fragment>
+  );
 }
 
 export async function getStaticProps() {
   // functions runs first than the page component
   // function that runs during build. ( static generation )
 
+  const user = process.env.DB_USER;
+  const password = process.env.DB_PASSWORD;
   const client = await MongoClient.connect(
-    "mongodb+srv://fernandodev:03042003bB@cluster0.uixyadr.mongodb.net/meetups?retryWrites=true&w=majority"
+    `mongodb+srv://${user}:${password}@cluster0.uixyadr.mongodb.net/meetups?retryWrites=true&w=majority`
   );
 
   const db = client.db();
